@@ -1,19 +1,25 @@
+// DashboardCards.jsx
 import React from 'react';
 import { FiCheckCircle, FiClock, FiXCircle, FiFileText, FiUpload } from 'react-icons/fi';
+// Uses SheetJS to parse CSV/xlsx/xls reliably in the browser
 import * as XLSX from 'xlsx';
 
-const DashboardCards = ({ applications = [], setApplications }) => {
-  const approved = applications.filter(app => app.status === 'approved').length;
-  const pending = applications.filter(app => app.status === 'pending').length;
-  const rejected = applications.filter(app => app.status === 'rejected').length;
-  const total = applications.length || 0;
-
+const DashboardCards = ({ applications, setApplications }) => {
   const stats = {
-    approved,
-    pending,
-    rejected,
-    total
+    approved: applications.filter(app => app.status === 'approved').length,
+    pending: applications.filter(app => app.status === 'pending').length,
+    rejected: applications.filter(app => app.status === 'rejected').length,
+    total: applications.length
   };
+
+  const cards = [
+    { title: "Total Applications", value: stats.total, icon: <FiFileText className="text-3xl text-purple-600" />, bgColor: "from-purple-50 to-purple-100", borderColor: "border-purple-200", accentColor: "bg-purple-100" },
+    { title: "Approved", value: stats.approved, icon: <FiCheckCircle className="text-3xl text-emerald-600" />, bgColor: "from-emerald-50 to-emerald-100", borderColor: "border-emerald-200", accentColor: "bg-emerald-100" },
+    { title: "Pending", value: stats.pending, icon: <FiClock className="text-3xl text-amber-600" />, bgColor: "from-amber-50 to-amber-100", borderColor: "border-amber-200", accentColor: "bg-amber-100" },
+    { title: "Rejected", value: stats.rejected, icon: <FiXCircle className="text-3xl text-rose-600" />, bgColor: "from-rose-50 to-rose-100", borderColor: "border-rose-200", accentColor: "bg-rose-100" }
+  ];
+
+  const clampScore = (score, min = 300, max = 900) => Math.max(min, Math.min(max, score));
 
   // Helper: try find id column header index (case-insensitive)
   const findIdIndex = (headers) => {
@@ -24,8 +30,6 @@ const DashboardCards = ({ applications = [], setApplications }) => {
     }
     return -1;
   };
-
-  const clampScore = (score, min = 300, max = 900) => Math.max(min, Math.min(max, score));
 
   // Primary file handler (accepts csv/xls/xlsx/xlsb/etc.)
   const handleFileChange = async (e) => {
@@ -174,41 +178,6 @@ const DashboardCards = ({ applications = [], setApplications }) => {
   const canUpdate = typeof setApplications === 'function';
   if (!canUpdate) console.error('DashboardCards: setApplications is not a function. Upload disabled.');
 
-  const cards = [
-    {
-      title: "Total Applications",
-      value: stats.total,
-      icon: <FiFileText className="text-3xl text-purple-600" />,
-      bgColor: "from-purple-50 to-purple-100",
-      borderColor: "border-purple-200",
-      accentColor: "bg-purple-100"
-    },
-    {
-      title: "Approved",
-      value: stats.approved,
-      icon: <FiCheckCircle className="text-3xl text-emerald-600" />,
-      bgColor: "from-emerald-50 to-emerald-100",
-      borderColor: "border-emerald-200",
-      accentColor: "bg-emerald-100"
-    },
-    {
-      title: "Pending",
-      value: stats.pending,
-      icon: <FiClock className="text-3xl text-amber-600" />,
-      bgColor: "from-amber-50 to-amber-100",
-      borderColor: "border-amber-200",
-      accentColor: "bg-amber-100"
-    },
-    {
-      title: "Rejected",
-      value: stats.rejected,
-      icon: <FiXCircle className="text-3xl text-rose-600" />,
-      bgColor: "from-rose-50 to-rose-100",
-      borderColor: "border-rose-200",
-      accentColor: "bg-rose-100"
-    }
-  ];
-
   return (
     <div>
       {/* Upload area */}
@@ -246,9 +215,7 @@ const DashboardCards = ({ applications = [], setApplications }) => {
                 <p className="text-gray-600 text-sm font-medium mb-1">{card.title}</p>
                 <p className="text-4xl font-bold text-gray-800">{card.value}</p>
               </div>
-              <div className={`p-3 ${card.accentColor} rounded-xl backdrop-blur`}>
-                {card.icon}
-              </div>
+              <div className={`p-3 ${card.accentColor} rounded-xl backdrop-blur`}>{card.icon}</div>
             </div>
             <div className="mt-4">
               <div className="h-2 bg-gray-200 rounded-full overflow-hidden">
@@ -258,11 +225,11 @@ const DashboardCards = ({ applications = [], setApplications }) => {
                     index === 1 ? 'bg-emerald-500' :
                     index === 2 ? 'bg-amber-500' : 'bg-rose-500'
                   }`}
-                  style={{ width: `${total ? (card.value / total) * 100 : 0}%` }}
-                ></div>
+                  style={{ width: `${(card.value / Math.max(stats.total, 1)) * 100}%` }}
+                />
               </div>
               <p className="text-xs text-gray-500 mt-2">
-                {(total ? ((card.value / total) * 100).toFixed(1) : '0.0')}% of total
+                {((card.value / Math.max(stats.total, 1)) * 100).toFixed(1)}% of total
               </p>
             </div>
           </div>

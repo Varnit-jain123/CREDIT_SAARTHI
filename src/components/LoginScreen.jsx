@@ -228,7 +228,7 @@ const LoginScreen = ({ selectedRole, onBack, onLogin }) => {
       
       // Navigate channel partner to dashboard route
       if (selectedRole === 'channelPartner') {
-        setTimeout(() => navigate('/dashboard'), 500);
+        setTimeout(() => navigate('/scoring'), 500);
       }
     }
   };
