@@ -3,7 +3,7 @@ import React, { useState } from 'react';
 import { useForm } from '../context/FormContext';
 import { supabase } from '../supabaseClient';
 import { uploadAllApplicationFiles } from '../utils/storageUploader';
-import './Page5Submission.css';
+import './page5Submission.css';
 
 function Page5Submission() {
   const { state, reset, goPrev, goToStep } = useForm();
