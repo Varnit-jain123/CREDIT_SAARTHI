@@ -1,0 +1,87 @@
+/* src/pages/Page1Eligibility.css */
+
+/* --- FULL SCREEN DARK OVERLAY --- */
+.eligibility-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(2, 6, 23, 0.88); /* dark navy */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 9999;
+}
+
+/* --- WHITE POPUP CARD --- */
+.eligibility-popup {
+  width: 100%;
+  max-width: 520px;
+  background: #ffffff;
+  border-radius: 14px;
+  padding: 28px 26px 30px;
+  box-shadow: 0 25px 60px rgba(0, 0, 0, 0.5);
+  animation: popupFade 0.25s ease-out;
+}
+
+/* --- TITLE --- */
+.popup-title {
+  font-size: 1.6rem;
+  font-weight: 600;
+  margin-bottom: 6px;
+  text-align: center;
+}
+
+.popup-subtitle {
+  font-size: 0.9rem;
+  color: #6b7280;
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+/* --- ERROR MESSAGE --- */
+.popup-error {
+  margin-top: 12px;
+  background: #fee2e2;
+  border: 1px solid #fecaca;
+  color: #991b1b;
+  padding: 10px 12px;
+  border-radius: 8px;
+  font-size: 0.9rem;
+}
+
+/* --- ACTIONS --- */
+.popup-actions {
+  margin-top: 22px;
+  display: flex;
+  justify-content: flex-end;
+}
+
+/* --- ANIMATION --- */
+@keyframes popupFade {
+  from {
+    opacity: 0;
+    transform: scale(0.95) translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+}
+
+/* BUTTONS (reuse across app) */
+.btn {
+  padding: 10px 18px;
+  border-radius: 999px;
+  font-size: 0.95rem;
+  cursor: pointer;
+  border: none;
+}
+
+.btn-primary {
+  background: #111827;
+  color: #ffffff;
+}
+
+.btn-primary:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
